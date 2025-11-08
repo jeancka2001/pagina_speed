@@ -1,0 +1,7 @@
+{
+  "name": "pagina_dpeed",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
