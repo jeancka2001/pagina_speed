@@ -1,0 +1,102 @@
+/* Navbar Styles */
+.navbar-header {
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-logo {
+    width: 120px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.navbar-nav {
+    display: none;
+    align-items: center;
+    gap: 24px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.navbar-nav a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav a:hover {
+    color: #000000;
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.navbar-btn-primary {
+    background: #E60000;
+    color: white;
+    border-color: #E60000;
+}
+
+.navbar-btn-primary:hover {
+    background: #CC0000;
+    border-color: #CC0000;
+}
+
+.navbar-btn-ghost {
+    background: white;
+    color: #1f2937;
+    border-color: #e5e7eb;
+}
+
+.navbar-btn-ghost:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .navbar-nav {
+        display: flex;
+    }
+    
+    .navbar-btn-ghost {
+        display: inline-block;
+    }
+}
