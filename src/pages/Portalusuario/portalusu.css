@@ -1,0 +1,212 @@
+/* RESET COMPLETO PARA SCROLL */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+/* CONTENEDOR PRINCIPAL CON SCROLL */
+.portal-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background-color: #ffffff;
+    color: #1f2937;
+    line-height: 1.5;
+    
+    /* SCROLL CONFIGURATION */
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* MAIN QUE CRECE Y PERMITE SCROLL */
+.portal-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    margin-top: 16px;
+    
+    /* PERMITIR CRECIMIENTO */
+    flex: 1;
+    width: 100%;
+}
+
+/* Cards */
+.portal-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.portal-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Botones */
+.portal-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.portal-btn-primary {
+    background: #E60000;
+    color: white;
+    border-color: #E60000;
+}
+
+.portal-btn-primary:hover {
+    background: #CC0000;
+    border-color: #CC0000;
+    transform: translateY(-1px);
+}
+
+.portal-btn-ghost {
+    background: white;
+    color: #1f2937;
+    border-color: #e5e7eb;
+}
+
+.portal-btn-ghost:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+/* Layout */
+.portal-header-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.portal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* Textos */
+.portal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.portal-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.portal-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.portal-text-sm {
+    font-size: 14px;
+}
+
+.portal-text-gray {
+    color: #6b7280;
+}
+
+.portal-text-dark {
+    color: #111827;
+}
+
+.portal-font-medium {
+    font-weight: 500;
+}
+
+/* Utilidades */
+.portal-flex {
+    display: flex;
+}
+
+.portal-flex-col {
+    flex-direction: column;
+}
+
+.portal-items-center {
+    align-items: center;
+}
+
+.portal-justify-between {
+    justify-content: space-between;
+}
+
+.portal-gap-2 {
+    gap: 8px;
+}
+
+.portal-gap-4 {
+    gap: 16px;
+}
+
+.portal-mt-2 {
+    margin-top: 8px;
+}
+
+.portal-mt-4 {
+    margin-top: 16px;
+}
+
+.portal-space-y-2 > * + * {
+    margin-top: 8px;
+}
+
+.portal-space-y-3 > * + * {
+    margin-top: 12px;
+}
+
+.portal-w-full {
+    width: 100%;
+}
+
+.portal-p-5 {
+    padding: 20px;
+}
+
+.portal-p-6 {
+    padding: 24px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .portal-header-section {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .portal-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .portal-title {
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .portal-main {
+        padding: 24px;
+    }
+}
