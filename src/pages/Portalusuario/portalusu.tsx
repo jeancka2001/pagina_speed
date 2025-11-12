@@ -151,7 +151,7 @@ const Iniciopagina: React.FC = () => {
                             <div className="portal-flex portal-items-center portal-justify-between">
                                 <span className="portal-font-medium portal-text-dark">Serial</span>
                                 <span className="portal-font-medium portal-text-dark">
-                                    {datost?.servicios?.[0]?.onu_sn || 'No disponible'}
+                                    {datost?.servicios?.[0]?.onu_sn || 'No disponible'} 
                                 </span>
                             </div>
                             <div className="portal-flex portal-items-center portal-justify-between">
