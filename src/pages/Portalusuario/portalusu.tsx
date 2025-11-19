@@ -62,6 +62,7 @@ const obtenerFacturasp = async (idcliente: number) => {
     }
 }
 
+
 const Iniciopagina: React.FC = () => {
     // Estados para almacenar los datos
     const [idcliente, setIdcliente] = useState<any>()
@@ -72,6 +73,10 @@ const Iniciopagina: React.FC = () => {
     const [ip, setIp] = useState("")
     const [direccion_principal, setDireccionPrincipal] = useState("")
     const [datost, setDatost] = useState<any>(null)
+    const [datosservicioscli, setdatosservicioscli] = useState<any>(null)
+    
+
+    const [servicio, setservicio] = useState<any>(null)
     const [showModal, setShowModal] = useState(false)
     const [historialFacturas, setHistorialFacturas] = useState<any[]>([])
     const [historialFacturasnp, setHistorialFacturasnp] = useState<any[]>([])
@@ -101,9 +106,80 @@ const Iniciopagina: React.FC = () => {
     //         console.log(err)
     //     })
     // }, [])
+
+
+
+
+    //soporte:
+    const autosoporte = async () => {
+        try {
+            console.log(datost)
+            if (datost.estado == "ACTIVO") {
+                console.log("bien")
+                try {
+                    console.log(servicio)
+                    let idservicio =servicio.id
+                    console.log(idservicio)
+                    
+                    let {data} = await axios.get("http://localhost:3007/hotspot/estadoservicio/"+idservicio)
+                    console.log("servisio estado:", data)
+                    
+                    let statusserv = data.onu_status
+                    if(statusserv=="Online"){
+                        console.log("onlmine")
+                        console.log("olt_id", servicio.smartolt.olt_id
+                           )
+                        try{
+                            let paramsserv = {
+                                "onu_external_id": datost.ID_EXTERNO_ONU,
+                                "ideservicio": idservicio,
+                                "olt_id": servicio[0].smartolt.olt_id,
+                                "nodo": servicio[0].nodo
+                            }
+                            console.log("parametros de servicio para ejecutar soporte", paramsserv)
+
+                            try {
+                                let { data } = await axios.post("https://api.t-ickets.com/mikroti/MovilApi/Soporte", paramsserv)
+                                console.log("soporte 1", data)
+                                return data
+                            } catch (error) {
+                                console.log("error de funcion soporte")
+                                return error
+                            }
+                        }catch(error){
+                            return error
+                        }
+                        
+
+                    }else{
+                        console.log("ticket dervociop")
+                    }
+                } catch (error) {
+                    console.log("mandar ticket2")
+                }
+
+            } else {
+                console.log("mandar ticket1")
+            }
+        } catch (error) {
+            return error
+        }
+        // let datosf = {
+        //     "id": ,
+        //     "estado": 1
+        // }
+        // try {
+        //     let { data } = await axios.post("http://localhost:3007/hotspot/internet2", datosf)
+        //     console.log("datanp: ", data)
+        //     return data
+        // } catch (error) {
+        //     return error
+        // }
+    }
+
     // MODALES...................................................................................._______________________________________________________________________________________
-    
-    const extraerdatosfactura = async  (id:number)=>{
+
+    const extraerdatosfactura = async (id: number) => {
         console.log("here", id)
         try {
             const resultado = await obtenerFacturas(id)
@@ -136,8 +212,8 @@ const Iniciopagina: React.FC = () => {
         }
     }
     const abrirModalFacturas = async () => {
-        
-        
+
+
         try {
             // const resultado = await obtenerFacturas(idcliente)
             // if (resultado.estado === "exito" && resultado.facturas) {
@@ -200,6 +276,7 @@ const Iniciopagina: React.FC = () => {
                 setDireccionPrincipal(datos.direccion_principal)
                 setIp(oupt.datos[0].servicios[0].ip)
                 setDatost(oupt.datos[0])
+                setservicio(oupt.datos[0].servicios[0])
             }
             console.log("h: ", oupt.datos[0].nombre)
 
@@ -237,9 +314,9 @@ const Iniciopagina: React.FC = () => {
             console.log("Respuesta del login:", response.data)
 
             if (response.data.estado === "exito") {
-               
+
                 console.log("cedula inica seison: ", cedula)
-                
+
                 setShowModalSesion(false)
                 // Limpiar formulario
                 setSesionData({ usuario: "", contrasena: "" })
@@ -250,7 +327,7 @@ const Iniciopagina: React.FC = () => {
             extraerdatos(datosLogin.cedula)
         } catch (error) {
             console.error("Error al iniciar sesión:", error)
-            
+
         } finally {
             setCargandoSesion(false)
         }
@@ -534,7 +611,7 @@ const Iniciopagina: React.FC = () => {
                             </div>
                         </div>
                         <div className="portal-flex portal-gap-2 portal-mt-4">
-                            <button className="portal-btn portal-btn-primary portal-w-full" onClick={abrirModalTicket}>Nuevo ticket</button>
+                            <button className="portal-btn portal-btn-primary portal-w-full" onClick={() => autosoporte()}>Auto Soprte</button>
                             <button className="portal-btn portal-btn-ghost portal-w-full" onClick={() => irwhats()}>Ir al whatsapp</button>
                         </div>
                     </div>
