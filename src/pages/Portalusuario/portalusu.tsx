@@ -74,7 +74,7 @@ const Iniciopagina: React.FC = () => {
     const [direccion_principal, setDireccionPrincipal] = useState("")
     const [datost, setDatost] = useState<any>(null)
     const [datosservicioscli, setdatosservicioscli] = useState<any>(null)
-    
+
 
     const [servicio, setservicio] = useState<any>(null)
     const [showModal, setShowModal] = useState(false)
@@ -118,65 +118,104 @@ const Iniciopagina: React.FC = () => {
                 console.log("bien")
                 try {
                     console.log(servicio)
-                    let idservicio =servicio.id
+                    let idservicio = servicio.id
                     console.log(idservicio)
-                    
-                    let {data} = await axios.get("http://localhost:3007/hotspot/estadoservicio/"+idservicio)
-                    console.log("servisio estado:", data)
-                    
-                    let statusserv = data.onu_status
-                    if(statusserv=="Online"){
-                        console.log("onlmine")
-                        console.log("olt_id", servicio.smartolt.olt_id
-                           )
-                        try{
-                            let paramsserv = {
-                                "onu_external_id": datost.ID_EXTERNO_ONU,
-                                "ideservicio": idservicio,
-                                "olt_id": servicio[0].smartolt.olt_id,
-                                "nodo": servicio[0].nodo
-                            }
-                            console.log("parametros de servicio para ejecutar soporte", paramsserv)
 
-                            try {
-                                let { data } = await axios.post("https://api.t-ickets.com/mikroti/MovilApi/Soporte", paramsserv)
-                                console.log("soporte 1", data)
-                                return data
-                            } catch (error) {
-                                console.log("error de funcion soporte")
-                                return error
+                    let { data } = await axios.get("http://localhost:3007/hotspot/estadoservicio/" + idservicio)
+                    console.log("servicio estado:", data)
+
+                    let statusserv = data.onu_status
+                    if (statusserv == "Online") {
+                        console.log("online")
+
+                        // Extraer olt_id directamente del string
+                        const oltIdMatch = servicio.smartolt.match(/olt_id";s:\d+:"([^"]*)"/);
+                        const olt_id = oltIdMatch ? oltIdMatch[1] : "no_encontrado";
+
+                        console.log("olt_id", olt_id);
+
+                        let paramsserv = {
+                            "onu_external_id": datost.ID_EXTERNO_ONU,
+                            "ideservicio": idservicio,
+                            "olt_id": olt_id,
+                            "nodo": servicio.nodo
+                        }
+                        console.log("parametros para soporte", paramsserv)
+
+                        try {
+                            console.log("dentro")
+                            let idserviciootl = servicio.id
+                            console.log(idservicio)
+
+                            let { data } = await axios.get("http://localhost:3007/hotspot/estadoonu/" + idserviciootl)
+                            console.log("onu señal:", data)
+
+                            if (data.onu_signal == "Very good") {
+                                console.log("bery god")
+                                console.log("mensaje de que esta todo bien y modal de reinciar router")
+
+                                let onu_external_id = datost.ID_EXTERNO_ONU
+                                console.log(onu_external_id)
+
+                                // let { data } = await axios.get("http://45.224.96.51:7557/devices/" + onu_external_id+"/tasks?connection_request")
+                                // console.log("onu señal:", data)
+
+
+                            } else {
+                                if (data.onu_signal == "Warning") {
+                                    console.log("warnig")
+                                } else {
+                                    if (data.onu_signal == "Critical") {
+                                        console.log("critical")
+                                        console.log("crear tickey")
+                                        crearNuevoTicket()
+
+                                    } else {
+                                        console.log("noc ")
+                                    }
+                                }
                             }
-                        }catch(error){
+
+                        } catch (error) {
                             return error
                         }
-                        
+                        // let { data: soporteData } = await axios.post("https://api.t-ickets.com/mikroti/MovilApi/Soporte", paramsserv)
+                        // console.log("soporte 1", soporteData)
+                        // return soporteData
 
-                    }else{
-                        console.log("ticket dervociop")
+                    } else {
+
+                        console.log("onu estatus servicio")
+                        if (statusserv == "Power fail") {
+                            console.log("Por Favor Verifique que su equipo wifi este conectado a la corriente.")
+                        } else {
+                            if (statusserv == "LOS") {
+                                console.log("los listar tickets: ")
+                                
+                                let parms = {
+                                    "token": "ejdGNmVseFZtd1NIczE5eTBhQy9xZz09",
+                                    "idcliente": datost.id
+                                }
+                                let { data } = await axios.get("http://45.224.96.50/api/v1/ListTicket", parms)
+                                console.log("onu señal:", data)
+return data
+                            } else {
+                                if (statusserv == "offline") {
+
+                                }
+                            }
+                        }
                     }
                 } catch (error) {
-                    console.log("mandar ticket2")
+                    console.log("mandar ticket2", error)
                 }
-
             } else {
                 console.log("mandar ticket1")
             }
         } catch (error) {
             return error
         }
-        // let datosf = {
-        //     "id": ,
-        //     "estado": 1
-        // }
-        // try {
-        //     let { data } = await axios.post("http://localhost:3007/hotspot/internet2", datosf)
-        //     console.log("datanp: ", data)
-        //     return data
-        // } catch (error) {
-        //     return error
-        // }
     }
-
     // MODALES...................................................................................._______________________________________________________________________________________
 
     const extraerdatosfactura = async (id: number) => {
@@ -300,7 +339,7 @@ const Iniciopagina: React.FC = () => {
         try {
             const datosLogin = {
                 cedula: sesionData.usuario,
-                passwors: sesionData.contrasena // Nota: el API espera "passwors" (posible typo en el API)
+                passwors: sesionData.contrasena
             }
 
             console.log("Enviando datos de login:", datosLogin)
@@ -626,12 +665,7 @@ const Iniciopagina: React.FC = () => {
                                     {datost?.MODELO_DE_EQUIPO || 'No disponible'}
                                 </span>
                             </div>
-                            <div className="portal-flex portal-items-center portal-justify-between">
-                                <span className="portal-font-medium portal-text-dark">Modelo del Equipo</span>
-                                <span className="portal-font-medium portal-text-dark">
-                                    {datost?.MODELO_DE_EQUIPO || 'No disponible'}
-                                </span>
-                            </div>
+
                             <div className="portal-flex portal-items-center portal-justify-between">
                                 <span className="portal-font-medium portal-text-dark">Tipo de servicio</span>
                                 <span className="portal-font-medium portal-text-dark">
